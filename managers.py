@@ -85,24 +85,21 @@ class BaseManager:
         for line in lines:
             values_format = [f'"{value}"' for value in map(str, line.values())]
             query = f"INSERT INTO {self.model_class.table_name} ({fields_format}) " \
-                f"VALUES ({', '.join(values_format)})"
+                    f"VALUES ({', '.join(values_format)})"
 
             self._execute_query(query)
 
         print('[INFO] Вставка значений в базу данных успешно выполнена')
 
-    def update(self, field_names: list, new_data: dict):
-        """Заменяет существующ в таблице новой строкой new_data"""
+    def update(self, column, delta):
+        """Изменяет существующий целочисленный столбец column в таблице на значение delta"""
 
-        # assert field_names == new_data.values(), \
-        #     "[ERROR] Поля для изменения отличаются при обновлении значений"
+        query = f"UPDATE {self.model_class.table_name} "\
+                f"SET {column} = {column} + {delta};"
 
-        # fields_format = ", ".join(field_names_old_data)
+        self._execute_query(query)
 
-        # query = f"UPDATE {self.model_class.table_name}" \
-        #     f"SET {", ".join()}"
-
-        pass
+        print('[INFO] Изменение существующего столбца в базе данных выполнено')
 
     def delete(self):
         """Удаляет все значения в базе данных"""
